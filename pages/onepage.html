@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name = "mobile-web-app-capable" content = "yes">
+  <meta name = "apple-mobile-web-app-capable" content = "yes">
+  <meta name="msapplication-navbutton-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/css/swiper.css">
+  <link rel="stylesheet" type="text/css" href="../css/styles.css">
+  <!-- Demo styles -->
+  <style>
+  html, body {
+    position: relative;
+    height: 100%;
+  }
+  body {
+    background: #eee;
+    
+    font-size: 14px;
+    color:#000;
+    margin: 0;
+    padding: 0;
+  }
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-slide {
+    font-size: 18px;
+    background: #fff;
+
+    /* Center slide text vertically */
+/*    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;*/
+  }
+  tr{
+    font-size:4vw;
+    color: #3e7b5d;
+  }
+  .accordion {
+    color: black;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: center;
+    outline: none;
+    transition: 0.4s;
+  }
+  .active, .accordion:hover {
+    background-color: darkgreen; 
+  }
+
+  .panel {
+    margin: 0;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+  .accordion:after {
+    content: '\02C5';
+    color: #777;
+    font-weight: bold;
+    float: right;
+  }
+  .active:after {
+    content: "\02C4";
+  }
+  .logouts{
+    position: absolute; 
+    right: 1%; 
+    margin-top: 2%;
+    top: 0; 
+    color: white;
+    font-size: 4vw;
+  }
+</style>
+</head>
+<body>
+  <!-- Swiper -->
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <!-------------------------------------------------------Student-Info------------------------------------------------>
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/ucheader.png" id="heads" class="imagedivone1">
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut imagedivone2"><br>
+            Logout
+          </div>
+        </div>
+        <img id="prof" class="imagedivone3">
+        <div class="row divrowone1">
+          <table class="tbl">
+            <tr>
+              <td colspan="2" style="font-size: 7vw;">Student Information</td>
+            </tr>
+            <tr>
+              <td><img src="../img/icon.png" class="iconss"></td>
+              <td id="name" style="font-size: 5vw;"></td>
+            </tr>
+            <tr>
+              <td><img src="../img/icon3.png" class="iconss"></td>
+              <td id="idnumber" style="font-size: 5vw;"></td>
+            </tr>
+            <tr>
+              <td><img src="../img/icon2.png" class="iconss"></td>
+              <td id="track" style="font-size: 5vw;"></td>
+            </tr>
+            <tr>
+              <td><img src="../img/icon4.png" class="imagedivone4"></td>
+              <td id="section" style="font-size: 5vw;"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-----------------------------------------------------------Grades-------------------------------------------------->
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads">
+          <font class="fonto">Grades</font>
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div class="divtwocontains1" id="contains">
+        </div>
+      </div>
+      <!----------------------------------------------------Gate-Attendance------------------------------------------------>
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads">
+          <font class="fonto">Gate Attendance</font>
+          <div class="text-right logouts" class="logoutss">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div class="divtwocontains2" id="contains"> 
+          <form>
+            <div class="form-group row">  
+              <div class="col-xs-6">
+                <select id="month" class="form-control">
+                  <option value="01">January</option>
+                  <option value="02">February</option>
+                  <option value="03">March</option>
+                  <option value="04">April</option>
+                  <option value="05">May</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </div>
+              <div class="col-xs-6">
+                <select id="days" class="form-control">
+                  <option value="01">1</option>
+                  <option value="02">2</option>
+                  <option value="03">3</option>
+                  <option value="04">4</option>
+                  <option value="05">5</option>
+                  <option value="06">6</option>
+                  <option value="07">7</option>
+                  <option value="08">8</option>
+                  <option value="09">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                  <option value="31">31</option>
+                </select>
+              </div>
+            </div>
+          </form>
+          <div class="row"> 
+            <div class="col-xs-12">
+              <center>
+                <button id="finder" class="btn btn-sm" style="color: white;"> 
+                  <span class="glyphicon glyphicon-search"></span>&nbsp;Search
+                </button>
+                <button id="classatt" class="btn btn-sm" style="color: white;">
+                  Class Attendance
+                </button>
+              </center>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-xs-12">
+              <input type="hidden" id = "hide" name="">
+              <table class="table">
+                <tbody id = "buudy">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-----------------------------------------------SOA------------------------------------------------------------->
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads" style="">
+          <font class="fonto">Statement of Account</font>
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div class="table-responsive" id="tabley">
+          <table class="table">
+            <thead>
+              <td colspan = "2" class="text-center" id="headsy">SCHOOL YEAR</td>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PERIODIC BALANCE: </td>
+                <td id="pblnce"></td>
+              </tr>
+              <tr>
+                <td>OUSTANDING BALANCE: </td>
+                <td id="blnce"></td>
+              </tr>
+              <tr>
+                <td>VOUCHER DISCOUNT: </td>
+                <td id="dsct"></td>
+              </tr>
+              <tr>
+                <td>DOWN PAYMENT: </td>
+                <td id="down"></td>
+              </tr>
+              <tr>
+                <td>DUES: </td>
+                <td id="juice"></td>
+              </tr>       
+            </tbody>
+          </table>
+          <table>
+            <tr>
+              <td>
+                <UL style="color: black;">
+                  <LI>FIRST QUARTER: </LI>
+                  <LI>SECOND QUARTER: </LI>
+                  <LI>THIRD QUARTER: </LI>
+                  <LI>FOURTH QUARTER: </LI>
+                  <LI>FIFTH QUARTER: </LI>
+                  <LI>SIXTH QUARTER: </LI>
+                </UL>
+              </td>
+              <td>
+                <UL style="color: black;">
+                  <LI id="Q1"></LI>
+                  <LI id="Q2"></LI>
+                  <LI id="Q3"></LI>
+                  <LI id="Q4"></LI>
+                  <LI id="Q5"></LI>
+                  <LI id="Q6"></LI>
+                </UL>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2"><a href="#" class="rcpt"><u>View Payments</u></a></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-----------------------------------------------------Schedule----------------------------------------------------->
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads">
+          <font class="fonto">Schedule</font>
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div id="contains" class="sch divfourcontains1">
+        </div>
+      </div>
+      <!------------------------------------------Class Attendance------------------------------------------------------->
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads">
+          <font class="fonto">Class Attendance</font>
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div class="table-responsive" id="tabley">
+          <table class="table" >
+            <thead>
+              <th><center>Date</center></th>
+              <th><center>Time</center></th>
+              <th><center>Subject</center></th>
+              <th><center>Remarks</center></th>
+            </thead>
+            <tbody id="buudy2">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--------------------------------------------------Receipt------------------------------------------------------->
+      <div class="swiper-slide">
+        <div class="row">
+          <img src="../img/header2.png" id="heads">
+          <font class="fonto">Statement of Account</font>
+          <div class="text-right logouts">
+            <img src="../img/logout.png" class = "logMeOut"  style="width: 8%;"><br>
+            Logout
+          </div>
+        </div>
+        <div class="table-responsive" id="tabley">
+          <table class="table">
+            <thead>
+              <td class="text-center" id="headsoa">STATEMENT OF ACCOUNTS</td>
+            </thead>
+            <thead>
+              <td class="text-center" id="headsy">PAYMENTS MADE</td>
+            </thead>
+          </table>
+        </div>
+        <div class="table-responsive" style="color: black; position: absolute;left: 0;top: 25%;">
+          <table class="table table-bordered">
+            <thead>
+              <th>DATE</th>
+              <th>RECEIPT #</th>
+              <th>PURPOSE</th>
+              <th>AMOUNT</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2018-05-15</td>
+                <td>a74k312</td>
+                <td>Tuition</td>
+                <td>5,986</td>
+              </tr>
+              <tr>
+                <td>2018-02-21</td>
+                <td>a74k312</td>
+                <td>Tuition</td>
+                <td>6,540</td>
+              </tr>
+              <tr>
+                <td>2017-11-05</td>
+                <td>a74k312</td>
+                <td>Tuition</td>
+                <td>7,340</td>
+              </tr>
+              <tr>
+                <td>2017-08-13</td>
+                <td>a74k312</td>
+                <td>Tuition</td>
+                <td>6,903</td>
+              </tr> 
+              <tr>
+                <td colspan="3"><a href="#" id="soa"><u>View Statement of Accounts</u></a></td>
+              </tr>      
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!----------------------------------------------foooooter------------------------------------------------------->
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div id="a" class="navs" style="background-color: #3e7b5d"><center><img src="../img/sinfo.png" class="imgs"></center><center>Profile</center></div>
+    <div id="b" class="navs"><center><img src="../img/grades.png" class="imgs"></center><center>Grades</center></div>
+    <div id="c" class="navs"><center><img src="../img/attendance.png" class="imgs"></center><center>Attendance</center></div>
+    <div id="d" class="navs"><center><img src="../img/ledger.png" class="imgs"></center><center>SOA</center></div>
+    <div id="e" class="navs"><center><img src="../img/schedule.png" class="imgs"></center><center>Schedule</center></div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="../dist/js/swiper.min.js"></script>
+  <!-- Initialize Swiper -->
+  <script type="text/javascript" src="../js/jquery.js"></script>
+  <script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../cordova.js"></script>
+  <script type="text/javascript" src="../js/moment.js"></script>
+  <script type="text/javascript" src="../js/com.js"></script>
+</body>
+</html>

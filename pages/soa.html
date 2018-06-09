@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+</head>
+<body>
+	<div class="row">
+		<img src="../img/header2.png" id="heads" style="">
+		<font  style="font-size: 5vw; position: absolute; left: 1%; margin-top:4%; margin-left: 5%; ">Statement of Account</font>
+		<div id="logouts" class="text-right" style="position: absolute; right: 1%; margin-top: 2%">
+			<img src="../img/logout.png" style="width: 8%;"><br>
+			Logout
+		</div>
+	</div>
+
+	<div class="table-responsive" id="tabley">
+
+		<table class="table">
+			<thead>
+				<td colspan = "2" class="text-center" id="headsy">SCHOOL YEAR</td>
+			</thead>
+			
+			<tbody>
+				<tr>
+					<td>PERIODIC BALANCE: </td>
+					<td id="pblnce"></td>
+				</tr>
+				<tr>
+					<td>OUSTANDING BALANCE: </td>
+					<td id="blnce"></td>
+				</tr>
+				<tr>
+					<td>VOUCHER DISCOUNT: </td>
+					<td id="dsct"></td>
+				</tr>
+				<tr>
+					<td>DOWN PAYMENT: </td>
+					<td id="down"></td>
+				</tr>
+				<tr>
+					<td>DUES: </td>
+					<td id="juice"></td>
+				</tr>				
+			</tbody>
+
+		</table>
+		<table>
+			<tr>
+				<td>
+					<UL style="color: black;">
+						<LI>FIRST QUARTER: </LI>
+						<LI>SECOND QUARTER: </LI>
+						<LI>THIRD QUARTER: </LI>
+						<LI>FOURTH QUARTER: </LI>
+						<LI>FIFTH QUARTER: </LI>
+						<LI>SIXTH QUARTER: </LI>
+					</UL>
+				</td>
+				<td>
+					<UL style="color: black;">
+						<LI id="Q1"></LI>
+						<LI id="Q2"></LI>
+						<LI id="Q3"></LI>
+						<LI id="Q4"></LI>
+						<LI id="Q5"></LI>
+						<LI id="Q6"></LI>
+					</UL>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	<a href="receipt.html"><u>View Payments</u></a>
+	<div class="footer">
+		
+		<!-- PROFILE -->
+		<div id="a" class="navs">
+			<center>
+				<img src="../img/sinfo.png" class="imgs">
+			</center>
+			<center>
+				Profile
+			</center>
+		</div>
+		
+		<!-- GRADES -->
+		<div id="b" class="navs">
+			<center>
+				<img src="../img/grades.png" class="imgs">
+			</center>
+			<center>
+				Grades
+			</center>
+		</div>
+		
+		<!-- ATTENDANCE -->
+		<div id="c" class="navs">
+			<center>
+				<img src="../img/attendance.png" class="imgs">
+			</center>
+			<center
+			>Attendance
+		</center>
+	</div>
+
+	<!-- SOA -->
+	<div id="d" class="navs" style="background-color: #3e7b5d">
+		<center>
+			<img src="../img/ledger.png" class="imgs">
+		</center>
+		<center>
+			SOA
+		</center>
+	</div>
+
+	<!-- SCHEDULE -->
+	<div id="e" class="navs">
+		<center>
+			<img src="../img/schedule.png" class="imgs">
+		</center>
+		<center>
+			Schedule
+		</center>
+	</div>
+
+</div>
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../cordova.js"></script>
+<script type="text/javascript">
+	var info = localStorage.getItem('user');
+	info = JSON.parse(info);
+	document.addEventListener('deviceready', onDeviceReady, false);
+
+	function onDeviceReady(){
+		cordova.plugins.backgroundMode.setDefaults({
+			title: "PPAPP",
+			text: "Your portal to UC"
+		});
+		cordova.plugins.backgroundMode.enable();
+		cordova.plugins.backgroundMode.excludeFromTaskList();
+	}
+	$(document).ready(function(){
+
+		$("#pblnce").html(info[6][0].periodic_bal);
+		$("#blnce").html(info[6][0].balance);
+		$("#dsct").html(info[6][0].vouch_disc);
+		$("#down").html(info[6][0].down_pay);
+		for (var i = 1; i < 7; i++) {
+			$("#Q"+i).html(info[6][0].periodic_bal);
+		}
+	});
+	$('#a').click(function(){
+		window.location.href="stud_info.html";
+	});
+	$('#b').click(function(){
+		window.location.href="grades.html";
+	});
+	$('#c').click(function(){
+		window.location.href="calendar.html";
+	});
+/*	$('#d').click(function(){
+		window.location.href="soa.html";
+	});*/
+	$('#e').click(function(){
+		window.location.href="schedule.html";
+	});
+	$('#logouts').click(function(){
+		$.ajax({
+			type: "post",
+			url: "http://nexus.uc-bcf.edu.ph/logout.php",
+			data: {
+				user_index : info[1].user_index
+			}
+		});
+		cordova.plugins.backgroundMode.disable();
+		localStorage.clear();
+		window.location.href="../index.html";
+	});
+
+	function loadlink(){
+		var selectedDay = $('#month').val()+"-"+$('#days').val();
+		$.ajax({
+			type: "post",
+			url: "http://nexus.uc-bcf.edu.ph/process.php",
+			data: {
+				user_index : info[1].user_index
+			},
+			cache:false,
+			timeout: 20000,
+			success:function(data){
+				var id;
+				var ch;
+				time = function (num) {
+					if (num == 1) {
+						ch="Your Child has arrived to school!"
+					}else{
+						ch="Your Child has left the school!";
+					}
+					cordova.plugins.notification.local.schedule({
+						id: 1,
+						title: "PPAPP",
+						text: ch,
+						badge: 1,
+						data: { test: id }
+					});
+				}
+				var userInfo = JSON.parse(data);
+				var newLength = userInfo[4].length;
+				if(newLength != info[4].length){
+					localStorage.setItem('user', JSON.stringify(userInfo));
+					info = localStorage.getItem('user');
+					info = JSON.parse(info); 
+					time(1);
+
+				}
+				if (userInfo[4][userInfo[4].length-1].time_out != null) {
+
+					info = localStorage.getItem('user');
+					info = JSON.parse(info); 
+					if (info[4][info[4].length-1].time_out == null) {
+						time(0);
+						localStorage.setItem('user', JSON.stringify(userInfo));
+						info = localStorage.getItem('user');
+						info = JSON.parse(info);
+					}
+				}
+
+			}
+		});
+	}
+loadlink(); // This will run on page load
+setInterval(function(){
+    loadlink() // this will run after every 5 seconds
+}, 1000);
+$(document).ready(function() {
+				//registering the back button
+				document.addEventListener("backbutton", onBackKeyDown, false); 
+			});
+function onBackKeyDown(e) {
+	var o = 'o';
+}
+</script>
+</body>
+</html>

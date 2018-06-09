@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<script type="text/javascript" src="../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/moment.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<style type="text/css">
+	</style>
+</head>
+<body>
+	<div class="row">
+		<img src="../img/header2.png" id="heads">
+		<font style="font-size: 5vw; position: absolute; left: 1%; margin-top:4%; margin-left: 5%; ">Class Attendance</font>
+		<div id="logouts" class="text-right" style="position: absolute; right: 1%; margin-top: 2%">
+			<img src="../img/logout.png" style="width: 8%;"><br>
+			Logout
+		</div>
+	</div>
+	<div class="table-responsive" id="tabley">
+		<table class="table">
+			<thead>
+				<td class="text-center" id="headsy">SEMESTER, SCHOOL YEAR ()</td>
+			</thead>
+		</table>
+
+		<table class="table" >
+			<thead>
+				<th><center>Date</center></th>
+				<th><center>Time</center></th>
+				<th><center>Subject</center></th>
+				<th><center>Remarks</center></th>
+			</thead>
+			<tbody id="buudy2">
+
+			</tbody>
+	</div>
+		
+		<div class="footer">
+			<div id="a" class="navs">
+				<center>
+					<img src="../img/sinfo.png" class="imgs">
+				</center>
+				<center>
+					Profile
+				</center>
+			</div>
+
+			<!-- GRADES -->
+			<div id="b" class="navs">
+				<center>
+					<img src="../img/grades.png" class="imgs">
+				</center>
+				<center>
+					Grades
+				</center>
+			</div>
+
+			<!-- ATTENDANCE -->
+			<div id="c" class="navs" style="background-color: #3e7b5d">
+				<center>
+					<img src="../img/attendance.png" class="imgs">
+				</center>
+				<center
+				>Attendance
+			</center>
+		</div>
+
+		<!-- SOA -->
+		<div id="d" class="navs">
+			<center>
+				<img src="../img/ledger.png" class="imgs">
+			</center>
+			<center>
+				SOA
+			</center>
+		</div>
+
+		<!-- SCHEDULE -->
+		<div id="e" class="navs">
+			<center>
+				<img src="../img/schedule.png" class="imgs">
+			</center>
+			<center>
+				Schedule
+			</center>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src="../cordova.js"></script> 
+	<script type="text/javascript">
+
+		var info = localStorage.getItem('user');
+		info = JSON.parse(info);
+		$('#a').click(function(){
+			window.location.href="stud_info.html";
+		});
+		$('#b').click(function(){
+			window.location.href="grades.html";
+		});
+		$('#c').click(function(){
+			window.location.href="calendar.html";
+		});
+		$('#d').click(function(){
+			window.location.href="soa.html";
+		});
+		$('#e').click(function(){
+			window.location.href="schedule.html";
+		});
+		$('#logouts').click(function(){
+				$.ajax({
+					type: "post",
+					url: "http://nexus.uc-bcf.edu.ph/logout.php",
+					data: {
+						user_index : info[1].user_index
+					}
+				});
+				cordova.plugins.backgroundMode.disable();
+				localStorage.clear();
+				window.location.href="../index.html";
+			});
+		$(document).ready(function(){
+			for (var i = info[5].length-1; i >-1; i--) {
+				$('#buudy2').append('<tr>');
+				$('#buudy2').append('<td><center>'+info[5][i].date+'</center></td>');
+				$('#buudy2').append('<td><center>'+convert(info[5][i].time)+'</center></td>');
+				$('#buudy2').append('<td><center>'+info[5][i].sub_code+'</center></td>');
+				switch(info[5][i].remarks){
+					case "P":
+						$('#buudy2').append('<td><center><div style="color:green">Present</div></center></td>');
+						break;
+					case "L":
+						$('#buudy2').append('<td><center><div style="color:orange">Late</div></center></td>');
+						break;
+					case "A":
+						$('#buudy2').append('<td><center><div style="color:red">Absent</div></center></td>');
+						break;
+				}
+				$('#buudy2').append('</tr>');
+			}
+			
+		});
+		function convert(input) {
+			return moment(input, 'HH:mm').format('h:mm A');
+		}
+	</script> 
+</body>
+</html>

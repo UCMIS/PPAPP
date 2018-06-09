@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+</head>
+
+<body>
+	
+	<div class="row">
+		<img src="../img/header2.png" id="heads">
+		<font style="font-size: 5vw; position: absolute; left: 1%; margin-top:4%; margin-left: 5%; ">Gate Attendance</font>
+		<div id="logouts" class="text-right" style="position: absolute; right: 1%; margin-top: 2%">
+			<img src="../img/logout.png" style="width: 8%;"><br>
+			Logout
+		</div>
+	</div>
+<!-- 	<div class="pics">
+		<img src="../dayview.png" id="day">
+	</div> -->
+	<div style="width: 100%;height: 80%;position: absolute; top: 10%; color: black; overflow-x: hidden;" id="contains">	
+		<form>
+			<div class="form-group row">	
+				<div class="col-xs-6">
+					<select id="month" class="form-control">
+						<option value="01">January</option>
+						<option value="02">February</option>
+						<option value="03">March</option>
+						<option value="04">April</option>
+						<option value="05">May</option>
+						<option value="06">June</option>
+						<option value="07">July</option>
+						<option value="08">August</option>
+						<option value="09">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+					</select>
+				</div>
+
+				<div class="col-xs-6">
+					<select id="days" class="form-control">
+						<option value="01">1</option>
+						<option value="02">2</option>
+						<option value="03">3</option>
+						<option value="04">4</option>
+						<option value="05">5</option>
+						<option value="06">6</option>
+						<option value="07">7</option>
+						<option value="08">8</option>
+						<option value="09">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+						<option value="16">16</option>
+						<option value="17">17</option>
+						<option value="18">18</option>
+						<option value="19">19</option>
+						<option value="20">20</option>
+						<option value="21">21</option>
+						<option value="22">22</option>
+						<option value="23">23</option>
+						<option value="24">24</option>
+						<option value="25">25</option>
+						<option value="26">26</option>
+						<option value="27">27</option>
+						<option value="28">28</option>
+						<option value="29">29</option>
+						<option value="30">30</option>
+						<option value="31">31</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		<div class="row">	
+			<div class="col-xs-12">
+				<center>
+					<button id="finder" class="btn btn-sm" style="color: white;"> 
+						<span class="glyphicon glyphicon-search"></span>&nbsp;Search
+					</button>
+					<button id="classatt" class="btn btn-sm" style="color: white;">
+						Class Attendance
+					</button>
+				</center>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-12">
+				<input type="hidden" id = "hide" name="">
+				<table class="table">
+					<tbody id = "buudy">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div id="a" class="navs"><center><img src="../img/sinfo.png" class="imgs"></center><center>Profile</center></div>
+		<div id="b" class="navs"><center><img src="../img/grades.png" class="imgs"></center><center>Grades</center></div>
+		<div id="c" class="navs" style="background-color: #3e7b5d"><center><img src="../img/attendance.png" class="imgs"></center><center>Attendance</center></div>
+		<div id="d" class="navs"><center><img src="../img/ledger.png" class="imgs"></center><center>SOA</center></div>
+		<div id="e" class="navs"><center><img src="../img/schedule.png" class="imgs"></center><center>Schedule</center></div>
+	</div>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../cordova.js"></script>
+	<script type="text/javascript" src="../js/moment.js"></script>
+	<script type="text/javascript">
+		document.addEventListener('deviceready', onDeviceReady, false);
+		function onDeviceReady(){
+			cordova.plugins.backgroundMode.setDefaults({
+				title: "PPAPP",
+				text: "Your portal to UC"
+			});
+			cordova.plugins.backgroundMode.enable();
+			cordova.plugins.backgroundMode.excludeFromTaskList();
+		}
+		var d = new Date();
+		var curMnth = d.getMonth()+1;
+		var curDay = d.getDate();
+		if (curMnth < 10) {
+			curMnth = "0"+curMnth;
+		}
+		if (curDay < 10) {
+			curDay = "0"+curDay;
+		}
+		$('#month').val(curMnth);
+		$('#days').val(curDay);
+		var info = localStorage.getItem('user');
+		info = JSON.parse(info);
+		function loadlink(){
+			var selectedDay = $('#month').val()+"-"+$('#days').val();
+			$.ajax({
+				type: "post",
+				url: "http://nexus.uc-bcf.edu.ph/process.php",
+				data: {
+					user_index : info[1].user_index
+				},
+				cache:false,
+				timeout: 20000,
+				success:function(data){
+					var id;
+					var ch;
+					time = function (num) {
+						if (num == 1) {
+							ch="Your Child has arrived to school!"
+						}else{
+							ch="Your Child has left the school!";
+						}
+						cordova.plugins.notification.local.schedule({
+							id: 1,
+							title: "PPAPP",
+							text: ch,
+							badge: 1,
+							data: { test: id }
+						});
+					}
+					var userInfo = JSON.parse(data);
+					var newLength = userInfo[4].length;
+					if(newLength != info[4].length){
+						localStorage.setItem('user', JSON.stringify(userInfo));
+						info = localStorage.getItem('user');
+						info = JSON.parse(info); 
+						if (info[4][info[4].length -1].date_in.substring(5,10) == selectedDay) {
+							time(1);
+							$('#buudy').append('</tr>');
+							$('#buudy').append('<tr>');
+							$('#buudy').append('<td><center>'+convert(info[4][info[4].length -1].time_in.substring(0,5))+'</center></td>');
+							try{
+
+								$('#buudy').append('<td><center>'+convert(info[4][info[4].length -1].time_out.substring(0,5))+'</center></td>');
+							} catch(err){
+								var o = 1;
+							}
+
+						}
+					}
+					if (userInfo[4][userInfo[4].length-1].time_out != null) {
+						info = localStorage.getItem('user');
+						info = JSON.parse(info); 
+						if (info[4][info[4].length-1].time_out == null) {
+							time(0);
+							localStorage.setItem('user', JSON.stringify(userInfo));
+							info = localStorage.getItem('user');
+							info = JSON.parse(info);
+							$('#buudy').append('<td><center>'+convert(info[4][info[4].length -1].time_out.substring(0,5))+'</center></td>');
+						}
+					}
+
+				}
+			});
+		}
+
+		$(document).ready(function(){
+			var selectedDay = $('#month').val()+"-"+$('#days').val();
+			$('#buudy').append('<tr><th><center>Time In</center></th><th><center>Time Out</center></th></tr>');
+			for (var i = 0; i < info[4].length; i++) {
+				/*alert(info[4][i].date_in.substring(5,10));*/
+				if (info[4][i].date_in.substring(5,10) == selectedDay) {
+
+					$('#buudy').append('<tr>');
+					$('#buudy').append('<td><center>'+convert(info[4][i].time_in.substring(0,5))+'</center></td>');
+					try{
+						$('#buudy').append('<td><center>'+convert(info[4][i].time_out.substring(0,5))+'</center></td>');
+					} catch(err){
+						$('#buudy').append('');
+					}
+					$('#buudy').append('</tr>');
+				}
+			}
+
+			$('#a').click(function(){
+				window.location.href="stud_info.html";
+			});
+			$('#b').click(function(){
+				window.location.href="grades.html";
+			});
+/*			$('#c').click(function(){
+				window.location.href="calendar.html";
+			});*/
+			$('#d').click(function(){
+				window.location.href="soa.html";
+			});
+			$('#e').click(function(){
+				window.location.href="schedule.html";
+			});
+			$('#classatt').click(function(){
+				window.location.href="CLASS_ATTENDANCE.html";
+			});
+			$('#logouts').click(function(){
+				$.ajax({
+					type: "post",
+					url: "http://nexus.uc-bcf.edu.ph/logout.php",
+					data: {
+						user_index : info[1].user_index
+					}
+				});
+				cordova.plugins.backgroundMode.disable();
+				localStorage.clear();
+				window.location.href="../index.html";
+			});
+			$('#month').change(function(){
+				switch($('#month').val()){
+					case "1":
+					case '3':
+					case '5':
+					case '7':
+					case '8':
+					case '10':
+					case '12':
+					$('#days').find('option').remove().end();
+					for (var i = 1; i < 32; i++) {
+						if (i < 10) {
+							$('#days').append('<option value="0'+i+'">'+i+'</option>');
+						}
+						else{
+							$('#days').append('<option value="'+i+'">'+i+'</option>');
+						}
+					}
+					break;
+					case '4':
+					case '6':
+					case '9':
+					case '11':
+					$('#days').find('option').remove().end();
+					for (var i = 1; i < 31; i++) {
+						if (i < 10) {
+							$('#days').append('<option value="0'+i+'">'+i+'</option>');
+						}
+						else{
+							$('#days').append('<option value="'+i+'">'+i+'</option>');
+						}
+					}
+					break;
+					case '2':
+					$('#days').find('option').remove().end();
+					for (var i = 1; i < 29; i++) {
+						if (i < 10) {
+							$('#days').append('<option value="0'+i+'">'+i+'</option>');
+						}
+						else{
+							$('#days').append('<option value="'+i+'">'+i+'</option>');
+						}
+					}
+					break;
+				}
+			});
+			$('#finder').click(function(){
+				var selectedDay = $('#month').val()+"-"+$('#days').val();
+				/*alert(selectedDay);*/
+
+				$('#buudy').find('td').remove().end();
+				$('#buudy').find('tr').remove().end();
+				$('#buudy').append('<tr><th><center>Time In</center></th><th><center>Time Out</center></th></tr>');
+				for (var i = 0; i < info[4].length; i++) {
+					/*alert(info[4][i].date_in.substring(5,10));*/
+					if (info[4][i].date_in.substring(5,10) == selectedDay) {
+
+						$('#buudy').append('<tr>');
+						$('#buudy').append('<td><center>'+convert(info[4][i].time_in.substring(0,5))+'</center></td>');
+						try{
+							$('#buudy').append('<td><center>'+convert(info[4][i].time_out.substring(0,5))+'</center></td>');
+						} catch(err){
+							$('#buudy').append('<td><center></center></td>');
+						}
+						$('#buudy').append('</tr>');
+					}
+				}
+			});
+
+
+		});
+
+		function convert(input) {
+			return moment(input, 'HH:mm').format('h:mm A');
+		}
+
+loadlink(); // This will run on page load
+setInterval(function(){
+    loadlink() // this will run after every 5 seconds
+}, 1000);
+</script>
+</div>
+</body>
+</html>

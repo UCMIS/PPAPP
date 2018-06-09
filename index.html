@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css">
+
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<style type="text/css">
+
+	tr{
+		border-collapse: collapse;
+		border: 1px solid black;
+	}
+	td{
+		width: 20px;
+		height: 10px;
+		border: 1px solid black;
+	}
+	#err{
+		color: #ff0000;
+	}
+	#particles-js{
+		background-image: url('img/bgreal2.png'); 
+		background-repeat: no-repeat; 
+		width: 100%; 
+		height: 100%; 
+		padding: 0; 
+		background-size: cover;
+		position: fixed;
+	}
+	input{
+		color: black;
+		background-color: none;
+		border: 1px solid darkgreen;
+		line-height: 0;
+		font-size: 17px;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 4% 6%;
+		border-radius: 60px;
+		font-weight: 100;
+		letter-spacing: 0.01em;
+		position: relative;
+		transition: 0.3s ease-in-out;
+	}
+	input:focus{
+		color: white;
+		outline: none;
+		background-color: darkgreen;
+		border:1px solid darkgreen;
+	}
+	label{
+		font-size: 5vw;
+	}
+</style>
+</head>
+<body>
+	<div id="particles-js">
+	</div>
+	<div class="container">
+		<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+			<div class="col-xs-4"></div>
+			<div class="col-xs-4 center-block">
+				<img class="img-responsive" src="img/logo.png" >
+				
+			</div>
+			<div class="col-xs-4"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2"></div>
+		<div class="col-xs-8 text-center">
+			<div class="from-group">
+				<label for="inputs">ID Number</label><br>
+				<input type="text" class = "from-control" id = "stud_id" name="">
+			</div>
+		</div>
+		<div class="col-xs-2"></div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2"></div>
+		<div class="col-xs-8 text-center" >
+			<div class="from-group">
+				<label for="inputs">Password</label><br>
+				<input type="password" class = "from-control" id = "ppwd" name="">
+			</div>
+		</div>
+		<div class="col-xs-2"></div>
+	</div>
+	<div class="row" style="margin-top: 5%;">
+		<div class="col-xs-2"></div>
+		<div class="col-xs-8 text-center" >
+			<div class="from-group">
+				<button class="btn" style="background-color: darkgreen;" id="sub">Login</button>
+			</div>
+
+			<br>
+			<center>
+				<div id="err"></div><br>
+				<div id="wait" style="display:none;width:40%;height:auto;top:50%;left:30%;padding:2px;"><img src='img/load.gif' style="width:100%; height:100%"/><br>Loading..</div>
+			</center>
+		</div>
+		<div class="col-xs-2"></div>
+	</div>
+	<div id="geolocation"></div>
+	<!-- <p id="gcm_id" style="position: absolute; left: 10%; top: 30%;"></p> -->
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="css/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/particles.min.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript">
+		var geoX;
+		var geoY;
+		var ipadds;
+		var info = localStorage.getItem('user');
+		info = JSON.parse(info);
+		$.getJSON('http://gd.geobytes.com/GetCityDetails?callback=?', function(data) {
+			/*alert(JSON.stringify(data, null, 2));*/
+			geoX=JSON.stringify(data.geobyteslatitude, null, 2);
+			geoY=JSON.stringify(data.geobyteslongitude, null, 2);
+			ipadds=JSON.stringify(data.geobytesipaddress, null, 2);
+		});
+		try{
+			if (info[0] == true) {
+				window.location.href="pages/onepage.html";
+
+			}
+		}
+		catch(err){
+			var o = 'o';
+		}
+		$(document).ajaxStart(function(){
+			$("#wait").fadeIn(500);
+		});
+		$(document).ajaxComplete(function(){
+			$("#wait").fadeOut(500);
+		});
+		$('#stud_id').click(function(){
+			$("#wait").fadeOut(500);
+		});
+		$('#ppwd').click(function(){
+			$("#wait").fadeOut(500);
+		});
+		$(document).ready(function(){
+			if (geoX && geoY && ipadds) {
+				var x="null";
+			}else{
+				geoX="null";
+				geoY="null";
+				ipadds="null";
+			}
+			$("#sub").click(function(){
+				var id = $("#stud_id").val();
+				var pass = $("#ppwd").val();
+				if($.trim(id).length >0 & $.trim(pass).length >0) {
+					$.ajax({
+						type: "post",
+						url: "http://nexus.uc-bcf.edu.ph/process.php",
+						data: {
+							id:id,
+							pwd:pass,
+							geoX: geoX,
+							geoY: geoY,
+							ipadd: ipadds
+						},
+						cache:false,
+						timeout: 60000,
+						success:function(data){
+							var userInfo = JSON.parse(data);
+							if (userInfo[0] == true) {
+								console.log(userInfo);
+								/*console.log(grades);*/
+								localStorage.setItem('user', JSON.stringify(userInfo));
+								/*localStorage.setItem('grades', JSON.stringify(grades));*/
+								if (userInfo[1].id_number == pass) {
+									window.location.href = "pages/change_pass.html";
+								}
+								else {
+									window.location.href="pages/onepage.html";
+								}
+							}else{
+								$("#err").html(userInfo[1]);
+							}
+						},
+						error:function(){
+							alert('Ooops! Something went wrong, It might be an internet connection problem, Please Try Again!');
+						}
+					});
+
+				}else{
+					alert('Input fields are empty');
+				}
+			});
+		});
+		/*loadlink();*/
+		$(document).ready(function() {
+				//registering the back button
+				document.addEventListener("backbutton", onBackKeyDown, false); 
+			});
+		function onBackKeyDown(e) {
+			var o = 'o';
+		}
+	</script>
+
+</body>
+</html>

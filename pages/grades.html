@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<style type="text/css">
+	tr{
+		font-size:4vw;
+		color: black;
+	}
+	.accordion {
+		color: black;
+		cursor: pointer;
+		width: 100%;
+		border: none;
+		text-align: center;
+		outline: none;
+		transition: 0.4s;
+	}
+	.active, .accordion:hover {
+		background-color: darkgreen; 
+	}
+
+	.panel {
+		margin: 0;
+		background-color: white;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.2s ease-out;
+	}
+	.accordion:after {
+		content: '\02C5';
+		color: #777;
+		font-weight: bold;
+		float: right;
+	}
+	.active:after {
+		content: "\02C4";
+	}
+	a{
+		color: white;
+		text-decoration: none;
+	}
+	a:hover{
+		color: white;
+		text-decoration: none;
+	}
+</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var info = localStorage.getItem('user');
+		info = JSON.parse(info);
+		$(document).ready(function(){
+			for (var i = 1; i <= info[2][info[2].length-1].semester; i++) {
+				var insertMe = "<div id=\"term\" class=\"accordion\" style=\"height: 10%; padding-top: 10px; background-color: #3e7b5d;\" >"+i+"st Semester SY "+info[2][0].syfrom_to+"</div>";
+				$('#contains').append(insertMe);
+				var panel = '<div class="panel"><table class="table table-condensed" id="'+i+'"><tbody><tr id="title" style="background-color: #5bb187;"><th class="text-center">Subject</th><th class="text-center">Grade</th></tr></tbody></table></div>';
+				$('#contains').append(panel);
+				for (var j = 0 ; j <= info[2].length-1; j++) {
+					if (info[2][j].semester==i) {
+						var tblval='<tr><td class="text-center">'+
+						info[2][j].sub_code+'</td><td class="text-center">'+
+						info[2][j].grade+'</td></tr>';
+						$('#'+i).append(tblval);
+					}
+				}
+			}
+			var acc = document.getElementsByClassName("accordion");
+			var i;
+
+			for (i = 0; i < acc.length; i++) {
+				acc[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var panel = this.nextElementSibling;
+					if (panel.style.maxHeight){
+						panel.style.maxHeight = null;
+					} else {
+						panel.style.maxHeight = panel.scrollHeight + "px";
+					} 
+				});
+			}
+		});
+
+	</script>
+	<div class="row">
+		<img src="../img/header2.png" id="heads">
+		<font  style="font-size: 5vw; position: absolute; left: 1%; margin-top:4%; margin-left: 5%; ">Grades</font>
+		<div id="logouts" class="text-right" style="position: absolute; right: 1%; margin-top: 2%">
+			<img src="../img/logout.png" style="width: 8%;"><br>
+			Logout
+		</div>
+	</div>
+	<div style="width: 100%;height: 80%; position: absolute; top: 10%" id="contains">
+	</div>
+	<div class="footer">
+		<div id="a" class="navs"><center><img src="../img/sinfo.png" class="imgs"></center><center>Profile</center></div>
+		<div id="b" class="navs" style="background-color: #3e7b5d"><center><img src="../img/grades.png" class="imgs"></center><center>Grades</center></div>
+		<div id="c" class="navs"><center><img src="../img/attendance.png" class="imgs"></center><center>Attendance</center></div>
+		<div id="d" class="navs"><center><img src="../img/ledger.png" class="imgs"></center><center>SOA</center></div>
+		<div id="e" class="navs"><center><img src="../img/schedule.png" class="imgs"></center><center>Schedule</div>
+		</div>
+		
+		<script type="text/javascript" src="../cordova.js"></script>
+		<script type="text/javascript">
+			document.addEventListener('deviceready', onDeviceReady, false);
+
+			function onDeviceReady(){
+				cordova.plugins.backgroundMode.setDefaults({
+					title: "PPAPP",
+					text: "Your portal to UC"
+				});
+				cordova.plugins.backgroundMode.enable();
+				cordova.plugins.backgroundMode.excludeFromTaskList();
+			}
+			$('#a').click(function(){
+				window.location.href="stud_info.html";
+			});
+/*			$('#b').click(function(){
+				window.location.href="grades.html";
+			});*/
+			$('#c').click(function(){
+				window.location.href="calendar.html";
+			});
+			$('#d').click(function(){
+				window.location.href="soa.html";
+			});
+			$('#e').click(function(){
+				window.location.href="schedule.html";
+			});
+			$('#logouts').click(function(){
+				$.ajax({
+					type: "post",
+					url: "http://nexus.uc-bcf.edu.ph/logout.php",
+					data: {
+						user_index : info[1].user_index
+					}
+				});
+				cordova.plugins.backgroundMode.disable();
+				localStorage.clear();
+				window.location.href="../index.html";
+			});
+			function loadlink(){
+				var selectedDay = $('#month').val()+"-"+$('#days').val();
+				$.ajax({
+					type: "post",
+					url: "http://nexus.uc-bcf.edu.ph/process.php",
+					data: {
+						user_index : info[1].user_index
+					},
+					cache:false,
+					timeout: 20000,
+					success:function(data){
+						var id;
+						var ch;
+						time = function (num) {
+							if (num == 1) {
+								ch="Your Child has arrived to school!"
+							}else{
+								ch="Your Child has left the school!";
+							}
+							cordova.plugins.notification.local.schedule({
+								id: 1,
+								title: "PPAPP",
+								text: ch,
+								badge: 1,
+								data: { test: id }
+							});
+						}
+						var userInfo = JSON.parse(data);
+						var newLength = userInfo[4].length;
+						if(newLength != info[4].length){
+							localStorage.setItem('user', JSON.stringify(userInfo));
+							info = localStorage.getItem('user');
+							info = JSON.parse(info); 
+							time(1);
+						}
+						if (userInfo[4][userInfo[4].length-1].time_out != null) {
+
+							info = localStorage.getItem('user');
+							info = JSON.parse(info); 
+							if (info[4][info[4].length-1].time_out == null) {
+								time(0);
+								localStorage.setItem('user', JSON.stringify(userInfo));
+								info = localStorage.getItem('user');
+								info = JSON.parse(info);
+							}
+						}
+
+					}
+				});
+			}
+loadlink(); // This will run on page load
+setInterval(function(){
+    loadlink() // this will run after every 5 seconds
+}, 10000);
+$(document).ready(function() {
+				//registering the back button
+				document.addEventListener("backbutton", onBackKeyDown, false); 
+			});
+function onBackKeyDown(e) {
+	var o = 'o';
+}
+</script>
+</body>
+</html>

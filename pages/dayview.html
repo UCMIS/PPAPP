@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+</head>
+<body>
+	<div class="row">
+		<img src="../img/header2.png" id="heads">
+	</div>
+	<div style="width: 100%;height: 90%;position: absolute; top: 10%;" id="contains">
+		<table class="table text-center" style="color: black;">
+			<tr class="">
+				<th id = "titl" class= "text-center" colspan="2"></th>
+			</tr>
+			<tr>
+				<th class= "text-center">TIME IN</th>
+				<th class= "text-center">TIME OUT</th>
+			</tr>
+			<tr>
+				<td>7:30AM</td>
+				<td>4:00PM</td>
+			</tr>
+		</table>
+	</div>
+	<body>
+		<div class="footer">
+			<div id="a" class="navs"><center><img src="../img/sinfo.png" class="imgs"></center><center>Profile</center></div>
+			<div id="b" class="navs"><center><img src="../img/grades.png" class="imgs"></center><center>Grades</center></div>
+			<div id="c" class="navs" style="background-color: #3e7b5d"><center><img src="../img/attendance.png" class="imgs"></center><center>Attendance</center></div>
+			<div id="d" class="navs"><center><img src="../img/ledger.png" class="imgs"></center><center>SOA</center></div>
+			<div id="e" class="navs"><center><img src="../img/schedule.png" class="imgs"></center><center>Schedule</center></div>
+		</div>
+
+		<script type="text/javascript" src="../cordova.js"></script>
+		<script type="text/javascript">
+			var getUrlParameter = function getUrlParameter(sParam) {
+				var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+
+				for (i = 0; i < sURLVariables.length; i++) {
+					sParameterName = sURLVariables[i].split('=');
+
+					if (sParameterName[0] === sParam) {
+						return sParameterName[1] === undefined ? true : sParameterName[1];
+					}
+				}
+			};
+			var day = getUrlParameter('day');
+			var mnth = getUrlParameter('month');
+			switch(mnth){
+				case('05'):
+				mnth = "May";
+				break;
+			}
+			$('#titl').html(mnth + " "+ day + ", 2018");
+			$('#a').click(function(){
+				window.location.href="stud_info.html";
+			});
+			$('#b').click(function(){
+				window.location.href="grades.html";
+			});
+			$('#c').click(function(){
+				window.location.href="calendar.html";
+			});
+			$('#d').click(function(){
+				window.location.href="soa.html";
+			});
+			$('#e').click(function(){
+				window.location.href="schedule.html";
+			});
+		</script>
+	</body>
+	</html>

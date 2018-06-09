@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<style type="text/css">
+	table{
+		color: darkgreen;
+		border-collapse: collapse;	
+		position: absolute;	
+		top: 50%;
+		left: 15%;
+		font-size: 5vw;
+	}
+	td{
+		padding: 1%;
+	}
+</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var info = localStorage.getItem('user');
+		info = JSON.parse(info);
+		$(document).ready(function(){
+			$('#prof').attr('src','http://nexus.uc-bcf.edu.ph/'+info[1].img);
+			$('#name').html(info[1].fullname);
+			$('#idnumber').html(info[1].id_number);
+			$('#track').html(info[1].track);
+			$('#section').html(info[1].section);
+		});
+	</script>
+	<div>
+		<div class="row">
+			<img src="../img/ucheader.png" id="heads" style="border-bottom: 5px solid #3e7b5d;">
+			<div id="logouts" class="text-right" style="position: absolute; right: 1%; margin-top: 2%">
+				<img src="../img/logout.png" style="width: 8%;"><br>
+				Logout
+			</div>
+		</div>
+		<img id="prof" style="border-color:  #3e7b5d">
+		<div class="row">
+			
+			<table class="tbl" style="color:  #3e7b5d">
+				<tr>
+					<td colspan="2" style="font-size: 7vw">Student Information</td>
+				</tr>
+				<tr>
+					<td><img src="../img/icon.png" class="iconss"></td>
+					<td id="name"></td>
+				</tr>
+				<tr>
+					<td><img src="../img/icon3.png" class="iconss"></td>
+					<td id="idnumber"></td>
+				</tr>
+				<tr>
+					<td><img src="../img/icon2.png" class="iconss"></td>
+					<td id="track"></td>
+				</tr>
+				<tr>
+					<td><img src="../img/icon4.png" style="width: 30%; height: auto;margin-left: 50%;margin-bottom: 20%"></td>
+					<td id="section"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="footer">
+		<div id="a" class="navs" style="background-color: #3e7b5d"><center><img src="../img/sinfo.png" class="imgs"></center><center>Profile</center></div>
+		<div id="b" class="navs"><center><img src="../img/grades.png" class="imgs"></center><center>Grades</center></div>
+		<div id="c" class="navs"><center><img src="../img/attendance.png" class="imgs"></center><center>Attendance</center></div>
+		<div id="d" class="navs"><center><img src="../img/ledger.png" class="imgs"></center><center>SOA</center></div>
+		<div id="e" class="navs"><center><img src="../img/schedule.png" class="imgs"></center><center>Schedule</center></div>
+	</div>
+	
+	<script type="text/javascript" src="../cordova.js"></script>
+	<script type="text/javascript">
+		/*$('#a').click(function(){
+			window.location.href="stud_info.html";
+		});
+		*/		
+		document.addEventListener('deviceready', onDeviceReady, false);
+
+		function onDeviceReady(){
+			backMode();
+		}
+		function backMode(){
+			cordova.plugins.backgroundMode.setDefaults({
+				title: "PPAPP",
+				text: "Your portal to UC"
+			});
+			cordova.plugins.backgroundMode.enable();
+			cordova.plugins.backgroundMode.excludeFromTaskList();
+		}
+		$('#b').click(function(){
+			window.location.href="grades.html";
+		});
+		$('#c').click(function(){
+			window.location.href="calendar.html";
+		});
+		$('#d').click(function(){
+			window.location.href="soa.html";
+		});
+		$('#e').click(function(){
+			window.location.href="schedule.html";
+		});
+		$('#logouts').click(function(){
+			$.ajax({
+				type: "post",
+				url: "http://nexus.uc-bcf.edu.ph/logout.php",
+				data: {
+					user_index : info[1].user_index
+				}
+			});
+			cordova.plugins.backgroundMode.disable();
+			localStorage.clear();
+			window.location.href="../index.html";
+		});
+		function loadlink(){
+			var selectedDay = $('#month').val()+"-"+$('#days').val();
+			$.ajax({
+				type: "post",
+				url: "http://nexus.uc-bcf.edu.ph/process.php",
+				data: {
+					user_index : info[1].user_index
+				},
+				cache:false,
+				timeout: 20000,
+				success:function(data){
+					var id;
+					var ch;
+					time = function (num) {
+						if (num == 1) {
+							ch="Your Child has arrived to school!"
+						}else{
+							ch="Your Child has left the school!";
+						}
+						cordova.plugins.notification.local.schedule({
+							id: 1,
+							title: "PPAPP",
+							text: ch,
+							badge: 1,
+							data: { test: id }
+						});
+					}
+					var userInfo = JSON.parse(data);
+					var newLength = userInfo[4].length;
+					if(newLength != info[4].length){
+						localStorage.setItem('user', JSON.stringify(userInfo));
+						info = localStorage.getItem('user');
+						info = JSON.parse(info); 
+						time(1);
+					}
+					if (userInfo[4][userInfo[4].length-1].time_out != null) {
+						info = localStorage.getItem('user');
+						info = JSON.parse(info); 
+						if (info[4][info[4].length-1].time_out == null) {
+							time(0);
+							localStorage.setItem('user', JSON.stringify(userInfo));
+							info = localStorage.getItem('user');
+							info = JSON.parse(info);
+						}
+					}
+
+				}
+			});
+		}
+loadlink(); // This will run on page load
+setInterval(function(){
+    loadlink() // this will run after every 5 seconds
+}, 1000);
+$(document).ready(function() {
+				//registering the back button
+				document.addEventListener("backbutton", onBackKeyDown, false); 
+			});
+function onBackKeyDown(e) {
+	var o = 'o';
+}
+</script>
+</body>
+</html>

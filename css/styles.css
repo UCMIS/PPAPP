@@ -1,0 +1,246 @@
+	html,body{
+		background-color: #ecf8ee;
+		margin: 0;
+		padding: 0;
+		color: white;
+		font: "century gothic";
+		overflow: hidden;
+		-webkit-touch-callout: none; 
+		-webkit-user-select: none; 
+		-khtml-user-select: none; 
+		-moz-user-select: none; 
+		-ms-user-select: none; 
+		user-select: none;
+	}
+	body{
+		width: 100%;
+		height: 100%;
+	}
+	.header{
+		width: 100%;
+		height: 10%;
+		top: 0;
+		left: 0;
+		background-color: darkgreen;
+		color: white;
+		position: absolute;
+	}
+	#panels{
+		top: 25%;
+		left: 20%;
+		position: absolute;
+	}
+	.panel-body{
+		width: 50%;
+		height: 70%;
+	}
+	.textbos{
+		border-radius: 10px;
+		border: 1px solid gray;
+		padding: 20px;
+	}
+	.butt{
+		width: 50%;
+		height: 10%;
+		background-color: skyblue;
+		bottom: 0;
+		left: 0;
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		font-size: 8vw;
+	}
+	.butt2{
+		width: 50%;
+		height: 10%;
+		background-color: rgb(255,128,128);
+		bottom: 0;
+		right: 0;
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		font-size: 8vw;
+	}
+	.btn{
+		background-color: #3e7b5d;
+	}
+
+	#heads{
+		top:0;
+		width: 100%;
+		height: auto;
+		max-height: 50%;
+		left: 0;
+		position: absolute;
+	}
+	#prof{
+		width: 50%;
+		height: auto;
+		max-height: 70%;
+		top: 10%;
+		left: 25%;
+		border: 5px solid darkgreen;
+		border-radius: 100%;
+		position: absolute;
+		background-size: cover;
+	}
+	.navs{
+		font-size: 3vw;
+		width: 20%;
+		height: 10%;
+		position: absolute;
+		background-color: #478c6a; 
+		color: white;
+	}
+	#colour{
+		color:black;
+	}
+	#a{
+		left: 0;
+		bottom: 0;
+	}
+	#b{
+		left: 20%;
+		bottom: 0;
+	}
+	#c{
+		left: 40%;
+		bottom: 0;
+	}
+	#d{
+		left: 60%;
+		bottom: 0;
+	}
+	#e{
+		left: 80%;
+		bottom: 0;
+	}
+	#a:hover, #b:hover, #c:hover, #d:hover, #e:hover{
+		background-color: #357053;
+	}
+	.imgs{
+		width: 40%;
+		height: auto;
+		padding-top: 5px;
+	}
+	img{
+		-webkit-user-drag: none;
+		-khtml-user-drag: none;
+		-moz-user-drag: none;
+		-o-user-drag: none;
+		user-drag: none;
+	}
+	.thiss{
+		top: 45%;	
+	}
+	.content{
+		color: darkgreen;
+		padding-top: 130%;
+
+	}
+	.iconss{
+		width:  50%;
+		height: auto;
+		font-size: 5vw;
+	}
+	#term{
+		color: black;
+		background-color: #5dd775;
+		width: 100%;
+		height: 30px;
+		font-size: 5vw;
+	}
+	#title{
+		color: black;
+		background-color: #055d15;
+		width: 100%;
+		height: 30px;
+		font-size: 5vw;
+	}
+	#contains{
+		overflow-y: scroll;
+
+	}
+	#day{
+		width: 100%;
+		height: 100%;
+
+	}
+	#hidbutt{
+		position: absolute;
+		width: 20%;
+		height: 10%;
+		top: 70%;
+		left: 42%;
+
+	}
+	
+	#headsoa{
+		background-color: #3e7b5d;
+	}
+	#headsy{
+		background-color: #5bb187;
+	}
+	#tabley{
+		color: black;
+		top: 10%;
+		overflow-y: scroll;
+		position: absolute;
+		width: 100%;
+		height: 80%;
+	}
+	.fonto{
+		font-size: 5vw; 
+		position: absolute; 
+		left: 1%; margin-top:4%; 
+		margin-left: 5%; 
+		top: 0;
+		color: white;
+	}
+	.logoutss{
+		position: absolute;
+		right: 1%; 
+		margin-top: 2%;top: 0; 
+		color: white;
+
+	}
+	.imagedivone1{
+		border-bottom: 5px solid #3e7b5d;
+	}
+	.imagedivone2{
+		width: 8%;
+	}
+	.imagedivone3{
+		border-color: #3e7b5d
+	}
+	.divrowone1{
+		position: absolute;top: 55%; 
+		left: 20%;
+	}
+	.imagedivone4{
+		width: 30%; 
+		height: auto;
+		margin-left: 50%;
+		margin-bottom: 20%;
+	}
+	.divtwocontains1{
+		width: 100%;
+		height: 80%; 
+		position: absolute; 
+		top: 10%;
+	}
+	.divtwocontains2{
+		width: 100%;
+		height: 80%;
+		position: absolute; 
+		top: 10%; 
+		color: black; 
+		overflow-x: hidden;
+	}
+	.divfourcontains1{
+		width: 100%;
+		height: 83%;
+		position: absolute; 
+		top: 10%;
+	}
+	

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Change Password</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/css/bootstrap.min.css">
+	<script type="text/javascript" src="../css/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<style type="text/css">
+</style>
+</head>
+
+<body style="color: black">
+	<center>
+		<div style="padding-top: 40%;">
+
+			Please Type your new password<br>
+			<input type="password" name="pass" id="pass"><br>
+
+			Confirm new password<br>
+			<input type="password" name="cpass" id="cpass"><br>
+			<button id="confirm" class="btn" style="margin-top:10%; ">
+				Change
+			</button>
+		</div>
+	</center>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../cordova.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			alert("For security Measures, We would like you to change your password");
+			$("#confirm").click(function(){
+				var pass = $('#pass').val();
+				var cpass = $('#cpass').val();
+				var info = localStorage.getItem('user');
+				info = JSON.parse(info);
+				$.ajax({
+					type: "post",
+					url: "http://nexus.uc-bcf.edu.ph/pass_process.php",
+					data: {
+						pwd:pass,
+						cpwd:cpass,
+						user_id:info[1].user_index
+					},
+					cache:false,
+					timeout: 60000,
+					success:function(data){
+						if (data == "success") {
+							window.location.href = "onepage.html";
+						}
+						else{
+							alert(data);
+						}
+					},
+					error:function(){
+						alert('Please try again');
+					}
+				});
+			});
+		});
+	</script>
+
+</body>
+</html>
